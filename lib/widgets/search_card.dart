@@ -117,7 +117,10 @@ class _SearchCardState extends State<SearchCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => VenuesScreen(venues: venues),
+                    builder: (_) => VenuesScreen(
+                      venues: venues,
+                      isFromLocation: false, // 🔥 IMPORTANT (typed search)
+                    ),
                   ),
                 );
               }

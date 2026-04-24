@@ -2,7 +2,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'dart:math';
 
-double calculateDistance(lat1, lon1, lat2, lon2) {
+double calculateDistance(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+    ){
   const R = 6371;
 
   var dLat = (lat2 - lat1) * pi / 180;
@@ -59,6 +64,10 @@ class SupabaseService {
     List<Map<String, dynamic>>.from(response);
 
     final nearby = allVenues.where((venue) {
+      if (venue['latitude'] == null || venue['longitude'] == null) {
+        return false; // 🔥 skip invalid data
+      }
+
       final distance = calculateDistance(
         userLat,
         userLng,
@@ -66,10 +75,10 @@ class SupabaseService {
         venue['longitude'],
       );
 
-      venue['distance'] = distance; // 🔥 add distance to each venue
+      venue['distance'] = distance;
 
       return distance <= 20 &&
-          venue['capacity'] >= guests &&
+          (venue['capacity'] ?? 0) >= guests &&
           venue['available'] == true;
     }).toList();
 
@@ -98,5 +107,38 @@ class SupabaseService {
     } catch (e) {
       print("❌ Error inserting booking: $e");
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getServicesByType(String type) async {
+    final response = await supabase
+        .from('services')
+        .select()
+        .eq('type', type);
+
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  Future<List<Map<String, dynamic>>> getNearbyServices({
+    required String type,
+    required double userLat,
+    required double userLng,
+  }) async {
+    final response = await supabase
+        .from('services')
+        .select()
+        .eq('type', type);
+
+    // 👉 You can later calculate distance here
+
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  Future<List<Map<String, dynamic>>> getVenuesByCity(String city) async {
+    final response = await supabase
+        .from('venues')
+        .select()
+        .ilike('location', '%$city%');
+
+    return List<Map<String, dynamic>>.from(response);
   }
 }

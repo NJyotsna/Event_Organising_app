@@ -7,6 +7,7 @@ import '../services/location_service.dart';
 import '../services/supabase_service.dart';
 import 'venues_screen.dart';
 import 'services_screen.dart';
+import 'service_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,10 +18,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  String selectedService = "";
+  bool showServiceDetails = false;
 
   List<Map<String, dynamic>> venues = [];
+  bool isFromLocation = true; // 🔥 IMPORTANT
 
-  // 📌 Screens list
   List<Widget> get _screens => [
     // 🏠 HOME
     SingleChildScrollView(
@@ -40,13 +43,32 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
 
     // 📍 VENUES
-    VenuesScreen(venues: venues),
+    VenuesScreen(
+      venues: venues,
+      isFromLocation: isFromLocation,
+    ),
 
-    // 📖 BOOKINGS (placeholder)
+    // 📖 BOOKINGS
     const Center(child: Text("Bookings coming soon")),
 
     // 🛠 SERVICES
-    const ServicesScreen(),
+    showServiceDetails
+        ? ServiceDetailScreen(
+      serviceName: selectedService,
+      onBack: () {
+        setState(() {
+          showServiceDetails = false;
+        });
+      },
+    )
+        : ServicesScreen(
+      onServiceClick: (service) {
+        setState(() {
+          selectedService = service;
+          showServiceDetails = true;
+        });
+      },
+    ),
 
     // 👤 PROFILE
     const Center(child: Text("Profile coming soon")),
@@ -56,8 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5EFE6),
-
-      // 🔥 CHANGE HERE
       body: _screens[_selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
@@ -66,11 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
 
         onTap: (index) async {
-          setState(() {
-            _selectedIndex = index;
-          });
-
-          // 📍 Fetch venues when clicking venues tab
           if (index == 1) {
             final locationService = LocationService();
             final supabaseService = SupabaseService();
@@ -84,8 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 guests: 100,
               );
 
+              if (!mounted) return;
+
               setState(() {
                 venues = data;
+                isFromLocation = true; // 🔥 GPS
+                _selectedIndex = index;
               });
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -94,30 +113,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }
+          } else {
+            setState(() {
+              _selectedIndex = index;
+            });
           }
         },
 
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
+              icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: "Venues",
-          ),
+              icon: Icon(Icons.location_on), label: "Venues"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: "Bookings",
-          ),
+              icon: Icon(Icons.book), label: "Bookings"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: "Services",
-          ),
+              icon: Icon(Icons.miscellaneous_services),
+              label: "Services"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
+              icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );

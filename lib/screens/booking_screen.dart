@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-// ─── Brand Colors ─────────────────────────────────────────────────────────────
-const Color kMaroon = Color(0xFF610021);
-const Color kGold = Color(0xFFFCC340);
-const Color kCream = Color(0xFFFFF8F1);
+import '../theme/app_colors.dart';
 
 // ─── Data Model ───────────────────────────────────────────────────────────────
 class _Booking {
@@ -43,7 +39,7 @@ const _bookings = [
     time: '10:00 – 16:00 (Day Slot)',
     image: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800',
     status: 'Pending Approval',
-    statusColor: kGold,
+    statusColor: AppColors.gold,
   ),
 ];
 
@@ -63,11 +59,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kCream,
+      backgroundColor: AppColors.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // ── Header ──────────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
@@ -79,7 +74,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.w900,
-                        color: kMaroon,
+                        color: AppColors.maroon,
                         height: 1.1,
                       ),
                     ),
@@ -97,8 +92,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 ),
               ),
             ),
-
-            // ── Filter Tabs ──────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(top: 28),
@@ -108,8 +101,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 ),
               ),
             ),
-
-            // ── Booking Cards ────────────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
               sliver: _activeTab == 0
@@ -134,7 +125,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 }
 
-// ─── Filter Tab Bar ───────────────────────────────────────────────────────────
 class _FilterTabBar extends StatelessWidget {
   final int activeTab;
   final ValueChanged<int> onTabChanged;
@@ -146,7 +136,7 @@ class _FilterTabBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: kMaroon.withOpacity(0.07), width: 1),
+          bottom: BorderSide(color: AppColors.maroon.withOpacity(0.07), width: 1),
         ),
       ),
       child: SingleChildScrollView(
@@ -196,11 +186,10 @@ class _FilterTab extends StatelessWidget {
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.2,
-                  color: isActive ? kMaroon : Colors.grey[400],
+                  color: isActive ? AppColors.maroon : Colors.grey[400],
                 ),
               ),
             ),
-            // Gold active indicator
             if (isActive)
               Positioned(
                 bottom: 0,
@@ -208,9 +197,9 @@ class _FilterTab extends StatelessWidget {
                 right: 0,
                 child: Container(
                   height: 3,
-                  decoration: BoxDecoration(
-                    color: kGold,
-                    borderRadius: const BorderRadius.vertical(
+                  decoration: const BoxDecoration(
+                    color: AppColors.gold,
+                    borderRadius: BorderRadius.vertical(
                       top: Radius.circular(4),
                     ),
                   ),
@@ -223,7 +212,6 @@ class _FilterTab extends StatelessWidget {
   }
 }
 
-// ─── Booking Card ─────────────────────────────────────────────────────────────
 class _BookingCard extends StatefulWidget {
   final _Booking booking;
   const _BookingCard({required this.booking});
@@ -246,14 +234,13 @@ class _BookingCardState extends State<_BookingCard> {
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        transform: Matrix4.translationValues(0, _pressed ? 0 : 0, 0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: kMaroon.withOpacity(0.05)),
+          border: Border.all(color: AppColors.maroon.withOpacity(0.05)),
           boxShadow: [
             BoxShadow(
-              color: kMaroon.withOpacity(_pressed ? 0.10 : 0.05),
+              color: AppColors.maroon.withOpacity(_pressed ? 0.10 : 0.05),
               blurRadius: _pressed ? 40 : 20,
               offset: Offset(0, _pressed ? 10 : 4),
             ),
@@ -263,7 +250,6 @@ class _BookingCardState extends State<_BookingCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Image ──────────────────────────────────────────────────────
             SizedBox(
               height: 180,
               width: double.infinity,
@@ -274,25 +260,21 @@ class _BookingCardState extends State<_BookingCard> {
                     Container(color: Colors.grey[200]),
               ),
             ),
-
-            // ── Details ────────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Status pill + booking ID
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Status badge
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 5,
                         ),
                         decoration: BoxDecoration(
-                          color: kMaroon.withOpacity(0.06),
+                          color: AppColors.maroon.withOpacity(0.06),
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: Row(
@@ -312,21 +294,15 @@ class _BookingCardState extends State<_BookingCard> {
                                 fontSize: 9,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.1,
-                                color: kMaroon,
+                                color: AppColors.maroon,
                               ),
                             ),
                           ],
                         ),
                       ),
-
-                      // Booking ID
                       Row(
                         children: [
-                          Icon(
-                            Icons.receipt_long_rounded,
-                            size: 13,
-                            color: Colors.grey[400],
-                          ),
+                          Icon(Icons.receipt_long_rounded, size: 13, color: Colors.grey[400]),
                           const SizedBox(width: 5),
                           Text(
                             '#${b.id}',
@@ -341,54 +317,38 @@ class _BookingCardState extends State<_BookingCard> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 14),
-
-                  // Venue name
                   Text(
                     b.venue,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF2D2D2D),
+                      color: AppColors.onSurface,
                       height: 1.2,
                     ),
                   ),
-
                   const SizedBox(height: 14),
-
-                  // Date
                   _InfoRow(icon: Icons.calendar_today_rounded, label: b.date),
                   const SizedBox(height: 8),
-
-                  // Time
                   _InfoRow(icon: Icons.access_time_rounded, label: b.time),
-
                   const SizedBox(height: 18),
-
-                  // Divider + View Details
-                  Divider(color: kMaroon.withOpacity(0.06), height: 1),
+                  Divider(color: AppColors.maroon.withOpacity(0.06), height: 1),
                   const SizedBox(height: 14),
-
-                  Align(
+                  const Align(
                     alignment: Alignment.centerRight,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Text(
                           'View Details',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
-                            color: kMaroon,
+                            color: AppColors.maroon,
                           ),
                         ),
                         SizedBox(width: 4),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          size: 18,
-                          color: kMaroon,
-                        ),
+                        Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.maroon),
                       ],
                     ),
                   ),
@@ -402,7 +362,6 @@ class _BookingCardState extends State<_BookingCard> {
   }
 }
 
-// ─── Info Row ─────────────────────────────────────────────────────────────────
 class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -413,7 +372,7 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: kMaroon.withOpacity(0.4)),
+        Icon(icon, size: 16, color: AppColors.maroon.withOpacity(0.4)),
         const SizedBox(width: 10),
         Text(
           label,
@@ -428,7 +387,6 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
 class _EmptyState extends StatelessWidget {
   final String tab;
   const _EmptyState({required this.tab});
@@ -444,12 +402,12 @@ class _EmptyState extends StatelessWidget {
             height: 72,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: kMaroon.withOpacity(0.06),
+              color: AppColors.maroon.withOpacity(0.06),
             ),
             child: Icon(
               Icons.calendar_today_rounded,
               size: 32,
-              color: kMaroon.withOpacity(0.4),
+              color: AppColors.maroon.withOpacity(0.4),
             ),
           ),
           const SizedBox(height: 16),

@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-
-// ─── Brand Colors ─────────────────────────────────────────────────────────────
-const Color kMaroon = Color(0xFF610021);
-const Color kRed = Color(0xFF8B0032);
-const Color kGold = Color(0xFFFCC340);
-const Color kCream = Color(0xFFFFF8F1);
-const Color kOnSurface = Color(0xFF1E1B17);
+import '../theme/app_colors.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 class _Amenity {
@@ -34,13 +28,13 @@ const _reviews = [
   _Review(
     'Ananya S.',
     'A',
-    kGold,
+    AppColors.gold,
     'Absolutely breathtaking venue. The attention to detail in the decor was unmatched. Truly a royal affair.',
   ),
   _Review(
     'Rahul V.',
     'R',
-    kMaroon,
+    AppColors.maroon,
     'Great location and excellent catering. Highly recommended for evening receptions.',
   ),
 ];
@@ -60,7 +54,7 @@ class _VenueDetailsScreenState extends State<VenueDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kCream,
+      backgroundColor: AppColors.cream,
       body: SafeArea(
         child: Column(
           children: [
@@ -70,24 +64,24 @@ class _VenueDetailsScreenState extends State<VenueDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _Gallery(),
+                    const _Gallery(),
                     const SizedBox(height: 28),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _TitleRow(),
+                          const _TitleRow(),
                           const SizedBox(height: 32),
                           const _SectionTitle('About the Venue'),
                           const SizedBox(height: 12),
-                          _AboutText(),
+                          const _AboutText(),
                           const SizedBox(height: 32),
                           const _SectionTitle('Amenities'),
                           const SizedBox(height: 16),
-                          _AmenitiesWrap(),
+                          const _AmenitiesWrap(),
                           const SizedBox(height: 32),
-                          _ReviewsSection(),
+                          const _ReviewsSection(),
                           const SizedBox(height: 32),
                           _BookingCard(
                             selectedPackage: _selectedPackage,
@@ -111,7 +105,6 @@ class _VenueDetailsScreenState extends State<VenueDetailsScreen> {
   }
 }
 
-// ─── Top Bar ──────────────────────────────────────────────────────────────────
 class _TopBar extends StatelessWidget {
   final VoidCallback onBack;
   const _TopBar({required this.onBack});
@@ -121,8 +114,8 @@ class _TopBar extends StatelessWidget {
     return Container(
       height: 60,
       decoration: BoxDecoration(
-        color: kCream.withOpacity(0.95),
-        border: Border(bottom: BorderSide(color: kMaroon.withOpacity(0.06))),
+        color: AppColors.cream.withOpacity(0.95),
+        border: Border(bottom: BorderSide(color: AppColors.maroon.withOpacity(0.06))),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
@@ -130,11 +123,7 @@ class _TopBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onBack,
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: kMaroon,
-              size: 24,
-            ),
+            icon: const Icon(Icons.arrow_back_rounded, color: AppColors.maroon, size: 24),
             splashRadius: 22,
           ),
           const Text(
@@ -143,12 +132,12 @@ class _TopBar extends StatelessWidget {
               fontStyle: FontStyle.italic,
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: kMaroon,
+              color: AppColors.maroon,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.share_rounded, color: kMaroon, size: 22),
+            icon: const Icon(Icons.share_rounded, color: AppColors.maroon, size: 22),
             splashRadius: 22,
           ),
         ],
@@ -157,8 +146,8 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-// ─── Gallery ──────────────────────────────────────────────────────────────────
 class _Gallery extends StatelessWidget {
+  const _Gallery();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -171,7 +160,6 @@ class _Gallery extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => Container(color: Colors.grey[200]),
           ),
-          // Gradient overlay
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -183,7 +171,6 @@ class _Gallery extends StatelessWidget {
               ),
             ),
           ),
-          // +12 Photos badge
           Positioned(
             bottom: 16,
             right: 16,
@@ -195,11 +182,7 @@ class _Gallery extends StatelessWidget {
               ),
               child: const Row(
                 children: [
-                  Icon(
-                    Icons.photo_library_rounded,
-                    color: Colors.white,
-                    size: 15,
-                  ),
+                  Icon(Icons.photo_library_rounded, color: Colors.white, size: 15),
                   SizedBox(width: 6),
                   Text(
                     '+12 Photos',
@@ -219,8 +202,8 @@ class _Gallery extends StatelessWidget {
   }
 }
 
-// ─── Title Row ────────────────────────────────────────────────────────────────
 class _TitleRow extends StatelessWidget {
+  const _TitleRow();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -235,7 +218,7 @@ class _TitleRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w900,
-                  color: kMaroon,
+                  color: AppColors.maroon,
                   height: 1.1,
                 ),
               ),
@@ -244,11 +227,11 @@ class _TitleRow extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: kGold,
+                color: AppColors.gold,
                 borderRadius: BorderRadius.circular(100),
                 boxShadow: [
                   BoxShadow(
-                    color: kGold.withOpacity(0.4),
+                    color: AppColors.gold.withOpacity(0.4),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),
@@ -256,14 +239,14 @@ class _TitleRow extends StatelessWidget {
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.star_rounded, size: 14, color: kMaroon),
+                  Icon(Icons.star_rounded, size: 14, color: AppColors.maroon),
                   SizedBox(width: 4),
                   Text(
                     '4.9',
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
                       fontSize: 13,
-                      color: kMaroon,
+                      color: AppColors.maroon,
                     ),
                   ),
                 ],
@@ -274,7 +257,7 @@ class _TitleRow extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            const Icon(Icons.location_on_rounded, size: 18, color: kMaroon),
+            const Icon(Icons.location_on_rounded, size: 18, color: AppColors.maroon),
             const SizedBox(width: 6),
             Text(
               'Heritage Block, Royal Enclave, Jaipur',
@@ -287,7 +270,6 @@ class _TitleRow extends StatelessWidget {
   }
 }
 
-// ─── Section Title ────────────────────────────────────────────────────────────
 class _SectionTitle extends StatelessWidget {
   final String text;
   const _SectionTitle(this.text);
@@ -299,14 +281,14 @@ class _SectionTitle extends StatelessWidget {
       style: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w800,
-        color: kMaroon,
+        color: AppColors.maroon,
       ),
     );
   }
 }
 
-// ─── About Text ───────────────────────────────────────────────────────────────
 class _AboutText extends StatelessWidget {
+  const _AboutText();
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -319,8 +301,8 @@ class _AboutText extends StatelessWidget {
   }
 }
 
-// ─── Amenities Wrap ───────────────────────────────────────────────────────────
 class _AmenitiesWrap extends StatelessWidget {
+  const _AmenitiesWrap();
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -333,10 +315,10 @@ class _AmenitiesWrap extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(100),
-                border: Border.all(color: kMaroon.withOpacity(0.08)),
+                border: Border.all(color: AppColors.maroon.withOpacity(0.08)),
                 boxShadow: [
                   BoxShadow(
-                    color: kMaroon.withOpacity(0.04),
+                    color: AppColors.maroon.withOpacity(0.04),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -345,7 +327,7 @@ class _AmenitiesWrap extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(a.icon, size: 18, color: kMaroon),
+                  Icon(a.icon, size: 18, color: AppColors.maroon),
                   const SizedBox(width: 8),
                   Text(
                     a.label,
@@ -364,8 +346,8 @@ class _AmenitiesWrap extends StatelessWidget {
   }
 }
 
-// ─── Reviews Section ──────────────────────────────────────────────────────────
 class _ReviewsSection extends StatelessWidget {
+  const _ReviewsSection();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -384,7 +366,7 @@ class _ReviewsSection extends StatelessWidget {
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
-                  color: kMaroon,
+                  color: AppColors.maroon,
                 ),
               ),
             ),
@@ -413,10 +395,10 @@ class _ReviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: kMaroon.withOpacity(0.05)),
+        border: Border.all(color: AppColors.maroon.withOpacity(0.05)),
         boxShadow: [
           BoxShadow(
-            color: kMaroon.withOpacity(0.04),
+            color: AppColors.maroon.withOpacity(0.04),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -430,10 +412,7 @@ class _ReviewCard extends StatelessWidget {
               Container(
                 width: 44,
                 height: 44,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: review.color,
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: review.color),
                 child: Center(
                   child: Text(
                     review.avatar,
@@ -454,18 +433,14 @@ class _ReviewCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
-                      color: Color(0xFF2D2D2D),
+                      color: AppColors.onSurface,
                     ),
                   ),
                   const SizedBox(height: 3),
                   Row(
                     children: List.generate(
                       5,
-                      (_) => const Icon(
-                        Icons.star_rounded,
-                        size: 13,
-                        color: kGold,
-                      ),
+                      (_) => const Icon(Icons.star_rounded, size: 13, color: AppColors.gold),
                     ),
                   ),
                 ],
@@ -488,7 +463,6 @@ class _ReviewCard extends StatelessWidget {
   }
 }
 
-// ─── Booking Card ─────────────────────────────────────────────────────────────
 class _BookingCard extends StatelessWidget {
   final int selectedPackage;
   final ValueChanged<int> onPackageChanged;
@@ -505,10 +479,10 @@ class _BookingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: kMaroon.withOpacity(0.06)),
+        border: Border.all(color: AppColors.maroon.withOpacity(0.06)),
         boxShadow: [
           BoxShadow(
-            color: kMaroon.withOpacity(0.10),
+            color: AppColors.maroon.withOpacity(0.10),
             blurRadius: 40,
             offset: const Offset(0, 12),
           ),
@@ -517,14 +491,13 @@ class _BookingCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Price
           Text(
             'STARTING FROM',
             style: TextStyle(
               fontSize: 10,
               letterSpacing: 1.8,
               fontWeight: FontWeight.w900,
-              color: kGold.withOpacity(0.85),
+              color: AppColors.gold.withOpacity(0.85),
             ),
           ),
           const SizedBox(height: 4),
@@ -533,36 +506,21 @@ class _BookingCard extends StatelessWidget {
               children: [
                 const TextSpan(
                   text: '₹2,50,000',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    color: kMaroon,
-                  ),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: AppColors.maroon),
                 ),
                 TextSpan(
                   text: ' / day',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey[500]),
                 ),
               ],
             ),
           ),
-
           const SizedBox(height: 24),
-
           const Text(
             'Available Packages',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF2D2D2D),
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.onSurface),
           ),
           const SizedBox(height: 12),
-
           _PackageOption(
             selected: selectedPackage == 0,
             title: 'Gold Package',
@@ -576,47 +534,26 @@ class _BookingCard extends StatelessWidget {
             desc: 'Venue + Premium Decor + Elite Catering + Photography',
             onTap: () => onPackageChanged(1),
           ),
-
           const SizedBox(height: 24),
-
-          // Book Now
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kMaroon,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                elevation: 6,
-                shadowColor: kMaroon.withOpacity(0.30),
-              ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Book Now',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                  ),
+                  Text('Book Now', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
                   SizedBox(width: 8),
                   Icon(Icons.arrow_forward_rounded, size: 20),
                 ],
               ),
             ),
           ),
-
           const SizedBox(height: 10),
           Center(
             child: Text(
               "You won't be charged yet",
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.grey[400],
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 11, color: Colors.grey[400], fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -625,7 +562,6 @@ class _BookingCard extends StatelessWidget {
   }
 }
 
-// ─── Package Option ───────────────────────────────────────────────────────────
 class _PackageOption extends StatelessWidget {
   final bool selected;
   final String title;
@@ -647,37 +583,30 @@ class _PackageOption extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: selected ? kMaroon.withOpacity(0.05) : Colors.white,
+          color: selected ? AppColors.maroon.withOpacity(0.05) : Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: selected ? kMaroon : kMaroon.withOpacity(0.10),
+            color: selected ? AppColors.maroon : AppColors.maroon.withOpacity(0.10),
             width: selected ? 2 : 1,
           ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Custom radio
             Container(
               margin: const EdgeInsets.only(top: 2),
               width: 20,
               height: 20,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: selected ? kMaroon : Colors.grey[400]!,
-                  width: 2,
-                ),
+                border: Border.all(color: selected ? AppColors.maroon : Colors.grey[400]!, width: 2),
               ),
               child: selected
                   ? Center(
                       child: Container(
                         width: 10,
                         height: 10,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: kMaroon,
-                        ),
+                        decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.maroon),
                       ),
                     )
                   : null,
@@ -692,17 +621,13 @@ class _PackageOption extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
-                      color: selected ? kMaroon : const Color(0xFF2D2D2D),
+                      color: selected ? AppColors.maroon : AppColors.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     desc,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                      height: 1.5,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[500], height: 1.5),
                   ),
                 ],
               ),
@@ -714,10 +639,8 @@ class _PackageOption extends StatelessWidget {
   }
 }
 
-// ─── Need Help Card ───────────────────────────────────────────────────────────
 class _NeedHelpCard extends StatefulWidget {
   const _NeedHelpCard();
-
   @override
   State<_NeedHelpCard> createState() => _NeedHelpCardState();
 }
@@ -736,11 +659,9 @@ class _NeedHelpCardState extends State<_NeedHelpCard> {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: _pressed
-              ? kMaroon.withOpacity(0.10)
-              : kMaroon.withOpacity(0.05),
+          color: _pressed ? AppColors.maroon.withOpacity(0.10) : AppColors.maroon.withOpacity(0.05),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: kMaroon.withOpacity(0.10)),
+          border: Border.all(color: AppColors.maroon.withOpacity(0.10)),
         ),
         child: Row(
           children: [
@@ -749,35 +670,20 @@ class _NeedHelpCardState extends State<_NeedHelpCard> {
               height: 52,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: kGold.withOpacity(0.12),
-                border: Border.all(color: kGold.withOpacity(0.25)),
+                color: AppColors.gold.withOpacity(0.12),
+                border: Border.all(color: AppColors.gold.withOpacity(0.25)),
               ),
-              child: const Icon(
-                Icons.headset_mic_rounded,
-                color: kMaroon,
-                size: 26,
-              ),
+              child: const Icon(Icons.headset_mic_rounded, color: AppColors.maroon, size: 26),
             ),
             const SizedBox(width: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Need Help?',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 15,
-                    color: kMaroon,
-                  ),
-                ),
+                const Text('Need Help?', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.maroon)),
                 const SizedBox(height: 3),
                 Text(
                   'Talk to our event specialist',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.grey[500]),
                 ),
               ],
             ),

@@ -4,8 +4,11 @@ import '../widgets/header.dart';
 import '../widgets/search_card.dart';
 import '../widgets/trust_section.dart';
 import '../widgets/services_section.dart';
+import '../widgets/custom_bottom_nav.dart';
+import '../widgets/loading_view.dart';
 import '../services/location_service.dart';
 import '../services/supabase_service.dart';
+import '../theme/app_colors.dart';
 import 'venues_screen.dart';
 import 'services_screen.dart';
 import 'service_detail_screen.dart';
@@ -13,30 +16,13 @@ import 'profile_screen.dart';
 import 'venuedetails_screen.dart';
 import 'booking_screen.dart';
 
-// ─── Brand Colors ─────────────────────────────────────────────────────────────
-const Color kMaroon = Color(0xFF610021);
-const Color kRed = Color(0xFF8B0032);
-const Color kGold = Color(0xFFFCC340);
-const Color kCream = Color(0xFFFFF8F1);
-
-// ─── Nav Tab Model ────────────────────────────────────────────────────────────
-class _NavTab {
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  const _NavTab(this.icon, this.activeIcon, this.label);
-}
-
+// ─── Nav Tab Configuration ───────────────────────────────────────────────────
 const _tabs = [
-  _NavTab(Icons.home_outlined, Icons.home_rounded, 'Home'),
-  _NavTab(Icons.location_city_outlined, Icons.location_city_rounded, 'Venues'),
-  _NavTab(
-    Icons.calendar_today_outlined,
-    Icons.calendar_today_rounded,
-    'Bookings',
-  ),
-  _NavTab(Icons.celebration_outlined, Icons.celebration_rounded, 'Services'),
-  _NavTab(Icons.person_outline_rounded, Icons.person_rounded, 'Profile'),
+  NavTab(Icons.home_outlined, Icons.home_rounded, 'Home'),
+  NavTab(Icons.location_city_outlined, Icons.location_city_rounded, 'Venues'),
+  NavTab(Icons.calendar_today_outlined, Icons.calendar_today_rounded, 'Bookings'),
+  NavTab(Icons.celebration_outlined, Icons.celebration_rounded, 'Services'),
+  NavTab(Icons.person_outline_rounded, Icons.person_rounded, 'Profile'),
 ];
 
 // ─── HomeScreen ───────────────────────────────────────────────────────────────
@@ -47,8 +33,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   // Venues state
@@ -61,14 +46,14 @@ class _HomeScreenState extends State<HomeScreen>
   String selectedService = '';
   bool showServiceDetails = false;
 
-  // Loading state for venues tab
+  // Loading state
   bool _venuesLoading = false;
 
   // ── Screen builder ──────────────────────────────────────────────────────────
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return _HomeTab();
+        return const _HomeTab();
 
       case 1:
         if (showVenueDetails) {
@@ -77,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
           );
         }
         if (_venuesLoading) {
-          return const _LoadingPlaceholder(message: 'Finding venues near you…');
+          return const LoadingView(message: 'Finding venues near you…');
         }
         return VenuesScreen(
           venues: venues,
@@ -115,8 +100,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   // ── Tab tap handler ──────────────────────────────────────────────────────────
   Future<void> _onTabTap(int index) async {
-    HapticFeedback.lightImpact();
-
     // Reset sub-navigation when switching away
     if (index != 1) setState(() => showVenueDetails = false);
     if (index != 3) setState(() => showServiceDetails = false);
@@ -130,12 +113,14 @@ class _HomeScreenState extends State<HomeScreen>
       try {
         final locationService = LocationService();
         final supabaseService = SupabaseService();
+        
         final position = await locationService.getUserLocation();
         final data = await supabaseService.getNearbyVenues(
           userLat: position.latitude,
           userLng: position.longitude,
-          guests: 100,
+          guests: 50, // More realistic default
         );
+        
         if (!mounted) return;
         setState(() {
           venues = data;
@@ -145,14 +130,18 @@ class _HomeScreenState extends State<HomeScreen>
       } catch (e) {
         if (!mounted) return;
         setState(() => _venuesLoading = false);
+        
+        String errorMsg = 'Could not fetch venues';
+        if (e.toString().contains('permission')) {
+          errorMsg = 'Location permission is required';
+        } else if (e.toString().contains('network')) {
+          errorMsg = 'Check your internet connection';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Location permission needed'),
-            backgroundColor: kMaroon,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            content: Text(errorMsg),
+            backgroundColor: AppColors.maroon,
           ),
         );
       }
@@ -163,35 +152,42 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kCream,
-      extendBody: true, // lets content slide under the nav bar
-
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 260),
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeIn,
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.03),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
+    // Handle back button for detail screens
+    return PopScope(
+      canPop: !showVenueDetails && !showServiceDetails,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (showVenueDetails) {
+          setState(() => showVenueDetails = false);
+        } else if (showServiceDetails) {
+          setState(() => showServiceDetails = false);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.cream,
+        extendBody: true,
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 0.02),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          ),
+          child: KeyedSubtree(
+            key: ValueKey('$_selectedIndex-$showVenueDetails-$showServiceDetails'),
+            child: _buildScreen(_selectedIndex),
           ),
         ),
-        child: KeyedSubtree(
-          key: ValueKey(
-            '$_selectedIndex-$showVenueDetails-$showServiceDetails',
-          ),
-          child: _buildScreen(_selectedIndex),
+        bottomNavigationBar: CustomBottomNav(
+          selectedIndex: _selectedIndex,
+          tabs: _tabs,
+          onTap: _onTabTap,
         ),
-      ),
-
-      bottomNavigationBar: _BottomNav(
-        selectedIndex: _selectedIndex,
-        onTap: _onTabTap,
       ),
     );
   }
@@ -199,8 +195,13 @@ class _HomeScreenState extends State<HomeScreen>
 
 // ─── Home Tab Content ─────────────────────────────────────────────────────────
 class _HomeTab extends StatelessWidget {
+  const _HomeTab();
+
   @override
   Widget build(BuildContext context) {
+    // Calculate clearance for bottom nav + floating space
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 100;
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -213,138 +214,9 @@ class _HomeTab extends StatelessWidget {
           const TrustSection(),
           const SizedBox(height: 10),
           const ServicesSection(),
-          const SizedBox(height: 100), // bottom nav clearance
+          SizedBox(height: bottomPadding),
         ],
       ),
     );
   }
 }
-
-// ─── Bottom Nav ───────────────────────────────────────────────────────────────
-class _BottomNav extends StatelessWidget {
-  final int selectedIndex;
-  final Future<void> Function(int) onTap;
-
-  const _BottomNav({required this.selectedIndex, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        boxShadow: [
-          BoxShadow(
-            color: kMaroon.withOpacity(0.08),
-            blurRadius: 24,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(
-              _tabs.length,
-              (i) => _NavItem(
-                tab: _tabs[i],
-                isActive: selectedIndex == i,
-                onTap: () => onTap(i),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Nav Item ─────────────────────────────────────────────────────────────────
-class _NavItem extends StatelessWidget {
-  final _NavTab tab;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  const _NavItem({
-    required this.tab,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: isActive ? kMaroon.withOpacity(0.08) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                isActive ? tab.activeIcon : tab.icon,
-                key: ValueKey(isActive),
-                color: isActive ? kMaroon : Colors.grey[400],
-                size: 24,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              tab.label,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? kMaroon : Colors.grey[400],
-                letterSpacing: 0.4,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Loading Placeholder ──────────────────────────────────────────────────────
-class _LoadingPlaceholder extends StatelessWidget {
-  final String message;
-  const _LoadingPlaceholder({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 40,
-            height: 40,
-            child: CircularProgressIndicator(color: kMaroon, strokeWidth: 3),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            message,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-

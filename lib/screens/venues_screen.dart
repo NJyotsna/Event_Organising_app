@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-
-// ─── Brand Colors ────────────────────────────────────────────────────────────
-const Color kMaroon = Color(0xFF610021);
-const Color kRed = Color(0xFF8B0032);
-const Color kGold = Color(0xFFFCC340);
-const Color kCream = Color(0xFFFFF8F1);
-const Color kSurface = Color(0xFFF4EDE5);
-const Color kOnSurface = Color(0xFF1E1B17);
+import '../theme/app_colors.dart';
 
 // ─── Data Model ──────────────────────────────────────────────────────────────
 class Venue {
@@ -94,7 +87,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
   String _searchQuery = '';
 
   List<Venue> get _filteredVenues {
-    // Map the raw data to Venue objects
     final List<Venue> displayVenues = widget.venues.map((v) {
       return Venue(
         id: v['id']?.toString() ?? '',
@@ -107,11 +99,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
         available: v['available'] ?? true,
       );
     }).toList();
-
-    if (displayVenues.isEmpty && widget.venues.isEmpty) {
-      // Fallback to kVenues if no data is passed (for demo)
-      // return kVenues; 
-    }
 
     return displayVenues.where((v) {
       final matchesSearch =
@@ -131,19 +118,16 @@ class _VenuesScreenState extends State<VenuesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kCream,
+      backgroundColor: AppColors.cream,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // ── Header ──────────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: _Header(),
               ),
             ),
-
-            // ── Search Bar ──────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -153,8 +137,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 ),
               ),
             ),
-
-            // ── Filter Chips ─────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(top: 14),
@@ -175,8 +157,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 ),
               ),
             ),
-
-            // ── Section Label ────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 4),
@@ -191,8 +171,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 ),
               ),
             ),
-
-            // ── Venue Cards ──────────────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
               sliver: SliverList(
@@ -201,11 +179,11 @@ class _VenuesScreenState extends State<VenuesScreen> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: _VenueCard(
                       venue: _filteredVenues[index],
-                        onTap: () {
-                          if (widget.onSelectVenue != null) {
-                            widget.onSelectVenue!(_filteredVenues[index].id);
-                          }
-                        },
+                      onTap: () {
+                        if (widget.onSelectVenue != null) {
+                          widget.onSelectVenue!(_filteredVenues[index].id);
+                        }
+                      },
                     ),
                   ),
                   childCount: _filteredVenues.length,
@@ -219,7 +197,6 @@ class _VenuesScreenState extends State<VenuesScreen> {
   }
 }
 
-// ─── Header Widget ────────────────────────────────────────────────────────────
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -232,10 +209,9 @@ class _Header extends StatelessWidget {
             Text(
               'Venues',
               style: TextStyle(
-                fontFamily: 'serif',
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
-                color: kMaroon,
+                color: AppColors.maroon,
                 letterSpacing: -0.5,
               ),
             ),
@@ -250,13 +226,12 @@ class _Header extends StatelessWidget {
             ),
           ],
         ),
-        // Avatar
         Container(
           width: 42,
           height: 42,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: kMaroon.withOpacity(0.15), width: 1.5),
+            border: Border.all(color: AppColors.maroon.withOpacity(0.15), width: 1.5),
             image: const DecorationImage(
               image: NetworkImage('https://i.pravatar.cc/150?img=47'),
               fit: BoxFit.cover,
@@ -268,7 +243,6 @@ class _Header extends StatelessWidget {
   }
 }
 
-// ─── Search Bar Widget ────────────────────────────────────────────────────────
 class _SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
@@ -283,7 +257,7 @@ class _SearchBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: kMaroon.withOpacity(0.05),
+            color: AppColors.maroon.withOpacity(0.05),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -298,7 +272,7 @@ class _SearchBar extends StatelessWidget {
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              style: const TextStyle(fontSize: 15, color: kOnSurface),
+              style: const TextStyle(fontSize: 15, color: AppColors.onSurface),
               decoration: InputDecoration(
                 hintText: 'Find venues, services...',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15),
@@ -308,18 +282,17 @@ class _SearchBar extends StatelessWidget {
               ),
             ),
           ),
-          // Filter button
           GestureDetector(
             onTap: () {},
             child: Container(
               margin: const EdgeInsets.all(6),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: kMaroon,
+                color: AppColors.maroon,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: kMaroon.withOpacity(0.25),
+                    color: AppColors.maroon.withOpacity(0.25),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),
@@ -338,7 +311,6 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-// ─── Filter Chip Widget ───────────────────────────────────────────────────────
 class _FilterChip extends StatelessWidget {
   final String label;
   final bool isSelected;
@@ -358,16 +330,16 @@ class _FilterChip extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? kGold : kCream,
+          color: isSelected ? AppColors.gold : AppColors.cream,
           borderRadius: BorderRadius.circular(100),
           border: Border.all(
-            color: isSelected ? kGold : kMaroon.withOpacity(0.12),
+            color: isSelected ? AppColors.gold : AppColors.maroon.withOpacity(0.12),
             width: 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: kGold.withOpacity(0.3),
+                    color: AppColors.gold.withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -380,7 +352,7 @@ class _FilterChip extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.3,
-            color: isSelected ? kMaroon : Colors.grey[600],
+            color: isSelected ? AppColors.maroon : Colors.grey[600],
           ),
         ),
       ),
@@ -388,7 +360,6 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-// ─── Venue Card Widget ────────────────────────────────────────────────────────
 class _VenueCard extends StatefulWidget {
   final Venue venue;
   final VoidCallback onTap;
@@ -420,7 +391,7 @@ class _VenueCardState extends State<_VenueCard>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: kMaroon.withOpacity(0.07),
+                color: AppColors.maroon.withOpacity(0.07),
                 blurRadius: 24,
                 offset: const Offset(0, 6),
               ),
@@ -430,7 +401,6 @@ class _VenueCardState extends State<_VenueCard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Image ─────────────────────────────────────────────────────
               _CardImage(
                 venue: widget.venue,
                 isFavourite: _isFavourite,
@@ -438,14 +408,11 @@ class _VenueCardState extends State<_VenueCard>
                   setState(() => _isFavourite = !_isFavourite);
                 },
               ),
-
-              // ── Details ───────────────────────────────────────────────────
               Padding(
                 padding: const EdgeInsets.all(18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Name + Rating
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -455,37 +422,32 @@ class _VenueCardState extends State<_VenueCard>
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 20,
-                              color: kMaroon,
+                              color: AppColors.maroon,
                               height: 1.1,
                             ),
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Rating badge
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: kGold.withOpacity(0.12),
+                            color: AppColors.gold.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: kGold.withOpacity(0.25)),
+                            border: Border.all(color: AppColors.gold.withOpacity(0.25)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.star_rounded,
-                                size: 14,
-                                color: kGold,
-                              ),
+                              const Icon(Icons.star_rounded, size: 14, color: AppColors.gold),
                               const SizedBox(width: 4),
                               Text(
                                 widget.venue.rating.toString(),
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w800,
-                                  color: kMaroon,
+                                  color: AppColors.maroon,
                                 ),
                               ),
                             ],
@@ -493,33 +455,20 @@ class _VenueCardState extends State<_VenueCard>
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 8),
-
-                    // Location
                     Row(
                       children: [
-                        Icon(
-                          Icons.location_on_rounded,
-                          size: 15,
-                          color: Colors.grey[400],
-                        ),
+                        Icon(Icons.location_on_rounded, size: 15, color: Colors.grey[400]),
                         const SizedBox(width: 4),
                         Text(
                           widget.venue.location,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[500],
-                          ),
+                          style: TextStyle(fontSize: 13, color: Colors.grey[500]),
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 16),
-                    Divider(color: kMaroon.withOpacity(0.07), height: 1),
+                    Divider(color: AppColors.maroon.withOpacity(0.07), height: 1),
                     const SizedBox(height: 16),
-
-                    // Price + Book Now
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -545,7 +494,7 @@ class _VenueCardState extends State<_VenueCard>
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w800,
-                                      color: kOnSurface,
+                                      color: AppColors.onSurface,
                                     ),
                                   ),
                                   TextSpan(
@@ -561,33 +510,9 @@ class _VenueCardState extends State<_VenueCard>
                             ),
                           ],
                         ),
-
-                        // Book Now button
                         ElevatedButton(
-                          onPressed: widget.venue.available
-                              ? widget.onTap
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: kMaroon,
-                            disabledBackgroundColor: Colors.grey[300],
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 22,
-                              vertical: 13,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            elevation: 4,
-                            shadowColor: kMaroon.withOpacity(0.3),
-                          ),
-                          child: const Text(
-                            'Book Now',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
+                          onPressed: widget.venue.available ? widget.onTap : null,
+                          child: const Text('Book Now'),
                         ),
                       ],
                     ),
@@ -602,7 +527,6 @@ class _VenueCardState extends State<_VenueCard>
   }
 }
 
-// ─── Card Image Section ───────────────────────────────────────────────────────
 class _CardImage extends StatelessWidget {
   final Venue venue;
   final bool isFavourite;
@@ -622,21 +546,14 @@ class _CardImage extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Image
           Image.network(
             venue.image,
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => Container(
               color: Colors.grey[200],
-              child: const Icon(
-                Icons.image_rounded,
-                size: 48,
-                color: Colors.grey,
-              ),
+              child: const Icon(Icons.image_rounded, size: 48, color: Colors.grey),
             ),
           ),
-
-          // Gradient overlay
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -648,8 +565,6 @@ class _CardImage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Favourite button (top-right)
           Positioned(
             top: 12,
             right: 12,
@@ -659,27 +574,17 @@ class _CardImage extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: isFavourite ? kMaroon : Colors.white.withOpacity(0.9),
+                  color: isFavourite ? AppColors.maroon : Colors.white.withOpacity(0.9),
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 6,
-                    ),
-                  ],
                 ),
                 child: Icon(
-                  isFavourite
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
+                  isFavourite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                   size: 18,
-                  color: isFavourite ? Colors.white : kMaroon,
+                  color: isFavourite ? Colors.white : AppColors.maroon,
                 ),
               ),
             ),
           ),
-
-          // Tag badges (bottom-left)
           Positioned(
             bottom: 12,
             left: 12,
@@ -697,7 +602,6 @@ class _CardImage extends StatelessWidget {
   }
 }
 
-// ─── Badge Widgets ────────────────────────────────────────────────────────────
 class _Badge extends StatelessWidget {
   final String label;
   const _Badge({required this.label});
@@ -709,7 +613,7 @@ class _Badge extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: kMaroon.withOpacity(0.12)),
+        border: Border.all(color: AppColors.maroon.withOpacity(0.12)),
       ),
       child: Text(
         label.toUpperCase(),
@@ -717,7 +621,7 @@ class _Badge extends StatelessWidget {
           fontSize: 9,
           fontWeight: FontWeight.w800,
           letterSpacing: 1.2,
-          color: kMaroon,
+          color: AppColors.maroon,
         ),
       ),
     );
@@ -735,7 +639,6 @@ class _AvailabilityBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: Colors.black.withOpacity(0.06)),
       ),
       child: Row(
         children: [

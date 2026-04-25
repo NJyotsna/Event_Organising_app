@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-
-// ─── Brand Colors ─────────────────────────────────────────────────────────────
-const Color kMaroon = Color(0xFF610021);
-const Color kRed = Color(0xFF8B0032);
-const Color kGold = Color(0xFFFCC340);
-const Color kCream = Color(0xFFFFF8F1);
-const Color kOnSurface = Color(0xFF1E1B17);
+import '../theme/app_colors.dart';
 
 // ─── Profile Screen ───────────────────────────────────────────────────────────
 class ProfileScreen extends StatelessWidget {
@@ -14,18 +8,15 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kCream,
+      backgroundColor: AppColors.cream,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Profile Header Card ──────────────────────────────────────
               const _ProfileHeaderCard(),
               const SizedBox(height: 24),
-
-              // ── Settings + Sidebar (stacked on mobile) ───────────────────
               const _PaymentCard(),
               const SizedBox(height: 16),
               const _NotificationCard(),
@@ -54,17 +45,16 @@ class _ProfileHeaderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: kMaroon.withOpacity(0.07),
+            color: AppColors.maroon.withOpacity(0.07),
             blurRadius: 40,
             offset: const Offset(0, 12),
           ),
         ],
-        border: Border.all(color: kMaroon.withOpacity(0.05)),
+        border: Border.all(color: AppColors.maroon.withOpacity(0.05)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          // Gold glow blob (top-right)
           Positioned(
             top: -60,
             right: -60,
@@ -73,22 +63,20 @@ class _ProfileHeaderCard extends StatelessWidget {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: kGold.withOpacity(0.10),
+                color: AppColors.gold.withOpacity(0.10),
               ),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(28),
             child: Column(
               children: [
-                // Avatar
                 Container(
                   width: 110,
                   height: 110,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: kCream,
+                    color: AppColors.cream,
                     border: Border.all(color: Colors.white, width: 4),
                     boxShadow: [
                       BoxShadow(
@@ -103,23 +91,17 @@ class _ProfileHeaderCard extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Name
                 const Text(
                   'Arjun Sharma',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF2D2D2D),
+                    color: AppColors.onSurface,
                     height: 1.1,
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
-                // Email + phone
                 Text(
                   'arjun.sharma@example.com  •  +91 98765 43210',
                   textAlign: TextAlign.center,
@@ -130,10 +112,7 @@ class _ProfileHeaderCard extends StatelessWidget {
                     height: 1.4,
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
-                // Buttons row
                 Row(
                   children: [
                     Expanded(
@@ -162,7 +141,6 @@ class _ProfileHeaderCard extends StatelessWidget {
   }
 }
 
-// ─── Primary Button ───────────────────────────────────────────────────────────
 class _PrimaryButton extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -181,11 +159,11 @@ class _PrimaryButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: kMaroon,
+          color: AppColors.maroon,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: kMaroon.withOpacity(0.25),
+              color: AppColors.maroon.withOpacity(0.25),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -211,7 +189,6 @@ class _PrimaryButton extends StatelessWidget {
   }
 }
 
-// ─── Outline Button ───────────────────────────────────────────────────────────
 class _OutlineButton extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -232,17 +209,17 @@ class _OutlineButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: kMaroon, width: 2),
+          border: Border.all(color: AppColors.maroon, width: 2),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 18, color: kMaroon),
+            Icon(icon, size: 18, color: AppColors.maroon),
             const SizedBox(width: 8),
             Text(
               label,
               style: const TextStyle(
-                color: kMaroon,
+                color: AppColors.maroon,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
@@ -254,7 +231,6 @@ class _OutlineButton extends StatelessWidget {
   }
 }
 
-// ─── Settings Card Base ───────────────────────────────────────────────────────
 class _SettingsCard extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -269,10 +245,10 @@ class _SettingsCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: kMaroon.withOpacity(0.05)),
+          border: Border.all(color: AppColors.maroon.withOpacity(0.05)),
           boxShadow: [
             BoxShadow(
-              color: kMaroon.withOpacity(0.05),
+              color: AppColors.maroon.withOpacity(0.05),
               blurRadius: 28,
               offset: const Offset(0, 6),
             ),
@@ -285,7 +261,6 @@ class _SettingsCard extends StatelessWidget {
   }
 }
 
-// ─── Icon Container ───────────────────────────────────────────────────────────
 class _IconBox extends StatelessWidget {
   final IconData icon;
   final Color bgColor;
@@ -311,7 +286,6 @@ class _IconBox extends StatelessWidget {
   }
 }
 
-// ─── Small Tag / Badge ────────────────────────────────────────────────────────
 class _Tag extends StatelessWidget {
   final String label;
   final IconData? icon;
@@ -323,15 +297,15 @@ class _Tag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: kCream,
+        color: AppColors.cream,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kMaroon.withOpacity(0.10)),
+        border: Border.all(color: AppColors.maroon.withOpacity(0.10)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 13, color: kMaroon),
+            Icon(icon, size: 13, color: AppColors.maroon),
             const SizedBox(width: 5),
           ],
           Text(
@@ -348,7 +322,6 @@ class _Tag extends StatelessWidget {
   }
 }
 
-// ─── Payment Methods Card ─────────────────────────────────────────────────────
 class _PaymentCard extends StatelessWidget {
   const _PaymentCard();
 
@@ -361,8 +334,8 @@ class _PaymentCard extends StatelessWidget {
         children: [
           const _IconBox(
             icon: Icons.credit_card_rounded,
-            bgColor: Color(0xFFFFF3CC), // gold/20
-            iconColor: kMaroon,
+            bgColor: Color(0xFFFFF3CC),
+            iconColor: AppColors.maroon,
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -377,7 +350,7 @@ class _PaymentCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF2D2D2D),
+                        color: AppColors.onSurface,
                       ),
                     ),
                     Icon(
@@ -411,7 +384,6 @@ class _PaymentCard extends StatelessWidget {
   }
 }
 
-// ─── Notification Settings Card ───────────────────────────────────────────────
 class _NotificationCard extends StatelessWidget {
   const _NotificationCard();
 
@@ -424,8 +396,8 @@ class _NotificationCard extends StatelessWidget {
         children: [
           const _IconBox(
             icon: Icons.notifications_rounded,
-            bgColor: Color(0xFFF9E8EC), // red/10
-            iconColor: kRed,
+            bgColor: Color(0xFFF9E8EC),
+            iconColor: AppColors.red,
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -440,7 +412,7 @@ class _NotificationCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF2D2D2D),
+                        color: AppColors.onSurface,
                       ),
                     ),
                     Icon(
@@ -477,7 +449,6 @@ class _NotificationCard extends StatelessWidget {
   }
 }
 
-// ─── Help & Support Card ──────────────────────────────────────────────────────
 class _SupportCard extends StatelessWidget {
   const _SupportCard();
 
@@ -487,34 +458,29 @@ class _SupportCard extends StatelessWidget {
       onTap: () {},
       child: Column(
         children: [
-          // Circle icon
           Container(
             width: 72,
             height: 72,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: kMaroon.withOpacity(0.06),
+              color: AppColors.maroon.withOpacity(0.06),
             ),
             child: const Icon(
               Icons.help_outline_rounded,
               size: 36,
-              color: kMaroon,
+              color: AppColors.maroon,
             ),
           ),
-
           const SizedBox(height: 16),
-
           const Text(
             'Help & Support',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF2D2D2D),
+              color: AppColors.onSurface,
             ),
           ),
-
           const SizedBox(height: 8),
-
           Text(
             'Need assistance? Our support team is here for you.',
             textAlign: TextAlign.center,
@@ -525,23 +491,20 @@ class _SupportCard extends StatelessWidget {
               height: 1.5,
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Contact Us link
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
                 'Contact Us',
                 style: TextStyle(
-                  color: kMaroon,
+                  color: AppColors.maroon,
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
                 ),
               ),
               SizedBox(width: 4),
-              Icon(Icons.chevron_right_rounded, color: kMaroon, size: 18),
+              Icon(Icons.chevron_right_rounded, color: AppColors.maroon, size: 18),
             ],
           ),
         ],
@@ -550,7 +513,6 @@ class _SupportCard extends StatelessWidget {
   }
 }
 
-// ─── Logout Button ────────────────────────────────────────────────────────────
 class _LogoutButton extends StatefulWidget {
   const _LogoutButton();
 
@@ -573,10 +535,10 @@ class _LogoutButtonState extends State<_LogoutButton> {
         decoration: BoxDecoration(
           color: _hovered ? const Color(0xFFFFF0F0) : Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: kMaroon.withOpacity(0.05)),
+          border: Border.all(color: AppColors.maroon.withOpacity(0.05)),
           boxShadow: [
             BoxShadow(
-              color: kMaroon.withOpacity(0.05),
+              color: AppColors.maroon.withOpacity(0.05),
               blurRadius: 28,
               offset: const Offset(0, 6),
             ),
@@ -591,7 +553,7 @@ class _LogoutButtonState extends State<_LogoutButton> {
               duration: const Duration(milliseconds: 180),
               child: const Icon(
                 Icons.logout_rounded,
-                color: Colors.red,
+                color: AppColors.error,
                 size: 20,
               ),
             ),
@@ -599,7 +561,7 @@ class _LogoutButtonState extends State<_LogoutButton> {
             const Text(
               'Logout',
               style: TextStyle(
-                color: Colors.red,
+                color: AppColors.error,
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
               ),
